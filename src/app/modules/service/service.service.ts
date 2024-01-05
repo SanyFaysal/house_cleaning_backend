@@ -17,7 +17,9 @@ const getServiceDetails = async (id: string) => {
         where: {
             id,
         },
-
+        include: {
+            schedule: true
+        }
     });
     return result;
 };
