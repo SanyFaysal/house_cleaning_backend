@@ -19,7 +19,8 @@ model User {
   cart   Cart?
   review Review[]
 
-  role USER_ROLE @default(USER)
+  role    USER_ROLE @default(USER)
+  Booking Booking[]
 
   @@map("users")
 }
@@ -36,17 +37,57 @@ model Cart {
 }
 
 model Service {
-  id              String  @id @default(uuid())
+  id              String     @id @default(uuid())
   serviceName     String
   price           Int
   serviceFeatures String?
   serviceDetails  String?
   warranty        String?
   pricingTerms    String?
+  location        String?
   cart            Cart[]
   review          Review?
+  categoryId      String
+  category        Category   @relation(fields: [categoryId], references: [id])
+  schedule        Schedule[]
+  booking         Booking[]
 
   @@map("services")
+}
+
+model Category {
+  id      String    @id @default(uuid())
+  title   String
+  service Service[]
+
+  @@map("categories")
+}
+
+model Schedule {
+  id        String  @id @default(uuid())
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  date    String
+  time    String
+  booking Booking[]
+
+  @@map("schedules")
+}
+
+model Booking {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  scheduleId String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+
+  @@map("bookings")
 }
 
 model Review {
