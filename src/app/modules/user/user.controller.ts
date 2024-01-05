@@ -17,10 +17,17 @@ const signup = catchAsync(async (req: Request, res: Response) => {
             message: 'User Already existed'
         });
     }
+
     const result = await UserService.signup(data);
-    res.json({ result })
+
+    const { id, role } = result as any;
+
+    const token = jwtHelpers.createToken({ id, role }, config.jwt.secret as string, config.jwt.expires_in as string)
+    res.status(httpStatus.OK).json({ status: true, message: "success", data: result, token })
 
 })
+
+
 const signin = catchAsync(async (req: Request, res: Response) => {
     const data = req.body;
     const user = await UserService.findUserByEmail(data)
@@ -39,8 +46,8 @@ const signin = catchAsync(async (req: Request, res: Response) => {
             message: 'Password not matched'
         });
     }
-    const { id, role, email } = user;
-    const token = jwtHelpers.createToken({ id, role, email }, config.jwt.secret as string, config.jwt.expires_in as string)
+    const { id, role } = user;
+    const token = jwtHelpers.createToken({ id, role }, config.jwt.secret as string, config.jwt.expires_in as string)
     return res.status(httpStatus.BAD_REQUEST).json({
         success: false,
         message: 'Login success',
@@ -48,7 +55,6 @@ const signin = catchAsync(async (req: Request, res: Response) => {
     });
 
 })
-
 
 const getMe = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.user as any;
@@ -61,8 +67,30 @@ const getMe = catchAsync(async (req: Request, res: Response) => {
         data: user
     })
 })
+const getAllUser = catchAsync(async (req: Request, res: Response) => {
+
+    const result = await UserService.getAllUser();
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+})
+const makeAdmin = catchAsync(async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    const result = await UserService.makeAdmin(userId);
+
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+})
+
 export const UserController = {
     signup,
     signin,
-    getMe
+    getMe,
+    getAllUser,
+    makeAdmin
 }
