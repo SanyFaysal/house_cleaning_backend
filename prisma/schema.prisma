@@ -7,34 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model USER {
-  id          String   @id @default(uuid())
+model User {
+  id          String    @id @default(uuid())
   fullName    String
-  email       String
+  email       String    @unique
+  password    String?
   phoneNumber String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
 
-  CART   CART?
-  REVIEW REVIEW[]
+  cart   Cart?
+  review Review[]
 
   role USER_ROLE @default(USER)
 
   @@map("users")
 }
 
-model CART {
+model Cart {
   id     String @id @default(uuid())
   userId String @unique
-  user   USER   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   serviceId String
-  service   SERVICE @relation(fields: [serviceId], references: [id])
+  service   Service @relation(fields: [serviceId], references: [id])
 
   @@map("carts")
 }
 
-model SERVICE {
+model Service {
   id              String  @id @default(uuid())
   serviceName     String
   price           Int
@@ -42,21 +43,23 @@ model SERVICE {
   serviceDetails  String?
   warranty        String?
   pricingTerms    String?
-  CART            CART[]
-  REVIEW          REVIEW?
+  cart            Cart[]
+  review          Review?
 
   @@map("services")
 }
 
-model REVIEW {
+model Review {
   id      String  @id @default(uuid())
   review  String?
   ratings Int
   userId  String
-  user    USER    @relation(fields: [userId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
 
   serviceId String  @unique
-  service   SERVICE @relation(fields: [serviceId], references: [id])
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  @@map("reviews")
 }
 
 enum USER_ROLE {
