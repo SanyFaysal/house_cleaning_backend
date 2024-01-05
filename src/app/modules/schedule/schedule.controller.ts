@@ -14,9 +14,9 @@ const createSchedule = catchAsync(async (req: Request, res: Response) => {
         data: result
     })
 })
-const getServiceSchedule = catchAsync(async (req: Request, res: Response) => {
-    const { serviceId } = req.params;
-    const result = await ScheduleService.getServiceSchedule(serviceId);
+const getScheduleById = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await ScheduleService.getScheduleById(id);
     return res.status(httpStatus.OK).json({
         status: true,
         message: "Successful",
@@ -45,7 +45,7 @@ const deleteSchedule = catchAsync(async (req: Request, res: Response) => {
 
 export const ScheduleController = {
     createSchedule,
-    getServiceSchedule,
+    getScheduleById,
     updateSchedule,
     deleteSchedule,
 

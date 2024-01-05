@@ -6,13 +6,13 @@ const createSchedule = async (payload: Schedule) => {
     const result = await prisma.schedule.create({ data: payload });
     return result;
 }
-const getServiceSchedule = async (serviceId: string) => {
+const getScheduleById = async (id: string) => {
     const result = await prisma.schedule.findMany({
         where: {
-            serviceId
+            id
         },
         include: {
-            service: true
+            booking: true
         }
     });
     return result;
@@ -39,7 +39,7 @@ const deleteSchedule = async (id: string) => {
 
 export const ScheduleService = {
     createSchedule,
-    getServiceSchedule,
+    getScheduleById,
     updateSchedule,
     deleteSchedule
 }

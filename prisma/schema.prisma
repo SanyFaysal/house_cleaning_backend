@@ -20,7 +20,7 @@ model User {
   review Review[]
 
   role    USER_ROLE @default(USER)
-  Booking Booking[]
+  booking Booking[]
 
   @@map("users")
 }

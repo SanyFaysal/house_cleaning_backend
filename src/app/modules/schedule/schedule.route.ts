@@ -15,8 +15,8 @@ router.post(
     ScheduleController.createSchedule
 );
 router.get(
-    '/:serviceId',
-    ScheduleController.getServiceSchedule
+    '/:id',
+    ScheduleController.getScheduleById
 );
 router.patch(
     '/:id',

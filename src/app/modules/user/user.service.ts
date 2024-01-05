@@ -23,6 +23,9 @@ const findUserById = async (id: string) => {
     const result = await prisma.user.findUnique({
         where: {
             id: id
+        },
+        include: {
+            booking: true
         }
     })
     return result;
@@ -41,7 +44,8 @@ const getAllUser = async () => {
             createdAt: true,
             updatedAt: true,
             password: false
-        }
+        },
+
     })
     return result;
 }
