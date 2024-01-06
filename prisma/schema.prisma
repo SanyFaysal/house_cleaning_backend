@@ -30,6 +30,9 @@ model Cart {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
 
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
   serviceId String
   service   Service @relation(fields: [serviceId], references: [id])
 
@@ -46,11 +49,14 @@ model Service {
   pricingTerms    String?
   location        String?
   cart            Cart[]
-  review          Review?
+  review          Review[]
   categoryId      String
   category        Category   @relation(fields: [categoryId], references: [id])
   schedule        Schedule[]
   booking         Booking[]
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("services")
 }
@@ -72,6 +78,8 @@ model Schedule {
   startTime String
   endTime   String
   booking   Booking?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("schedules")
 }
@@ -89,6 +97,9 @@ model Booking {
   scheduleId String   @unique
   schedule   Schedule @relation(fields: [scheduleId], references: [id])
 
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
   @@map("bookings")
 }
 
@@ -99,8 +110,11 @@ model Review {
   userId  String
   user    User    @relation(fields: [userId], references: [id])
 
-  serviceId String  @unique
+  serviceId String
   service   Service @relation(fields: [serviceId], references: [id])
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("reviews")
 }

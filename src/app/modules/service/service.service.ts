@@ -18,7 +18,17 @@ const getServiceDetails = async (id: string) => {
             id,
         },
         include: {
-            schedule: true
+            schedule: true,
+            review: {
+                include: {
+                    user: {
+                        select: {
+                            fullName: true,
+                            email: true
+                        }
+                    }
+                }
+            }
         }
     });
     return result;
