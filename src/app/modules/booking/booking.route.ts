@@ -13,5 +13,10 @@ router.post(
     auth(USER_ROLE.USER),
     BookingController.createBooking
 );
+router.patch(
+    '/:id',
+    auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    BookingController.updateBooking
+);
 
 export const BookingRoutes = router

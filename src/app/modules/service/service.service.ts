@@ -8,7 +8,15 @@ const createService = async (data: Service) => {
 
 
 const getAllService = async () => {
-    const result = await prisma.service.findMany({});
+    const result = await prisma.service.findMany({
+        include: {
+            booking: {
+                select: {
+                    id: true
+                }
+            }
+        }
+    });
     return result;
 };
 
@@ -18,7 +26,11 @@ const getServiceDetails = async (id: string) => {
             id,
         },
         include: {
-            schedule: true,
+            schedule: {
+                include: {
+                    booking: true
+                }
+            },
             review: {
                 include: {
                     user: {
@@ -28,7 +40,9 @@ const getServiceDetails = async (id: string) => {
                         }
                     }
                 }
-            }
+            },
+            category: true,
+            booking: true
         }
     });
     return result;

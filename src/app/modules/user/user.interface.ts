@@ -3,8 +3,8 @@ export type IUser = {
     fullName?: string;
     email: string;
     password?: string
-    // phoneNumber?: string;
-    // createdAt?: string;
-    // updatedAt?: string;
+    phoneNumber?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 

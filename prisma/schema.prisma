@@ -40,18 +40,19 @@ model Cart {
 }
 
 model Service {
-  id              String     @id @default(uuid())
+  id              String         @id @default(uuid())
   serviceName     String
   price           Int
   serviceFeatures String?
   serviceDetails  String?
-  warranty        String?
   pricingTerms    String?
   location        String?
+  warranty        String?
+  categoryId      String
+  status          SERVICE_STATUS @default(AVAILABLE)
   cart            Cart[]
   review          Review[]
-  categoryId      String
-  category        Category   @relation(fields: [categoryId], references: [id])
+  category        Category       @relation(fields: [categoryId], references: [id])
   schedule        Schedule[]
   booking         Booking[]
 
@@ -62,9 +63,11 @@ model Service {
 }
 
 model Category {
-  id      String    @id @default(uuid())
-  title   String
-  service Service[]
+  id        String    @id @default(uuid())
+  title     String
+  service   Service[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("categories")
 }
@@ -97,6 +100,18 @@ model Booking {
   scheduleId String   @unique
   schedule   Schedule @relation(fields: [scheduleId], references: [id])
 
+  // personalize info
+  fullName        String?
+  email           String?
+  phoneNumber     String?
+  additionalNotes String?
+  // address
+  houseNo         String?
+  roadNo          String?
+  blockNo         String?
+  sectorNo        String?
+  area            String?
+
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
@@ -123,6 +138,12 @@ enum USER_ROLE {
   USER
   ADMIN
   SUPER_ADMIN
+}
+
+enum SERVICE_STATUS {
+  AVAILABLE
+  DISCONTINUED
+  UPCOMING
 }
 
 enum BOOKING_STATUS {

@@ -16,6 +16,7 @@ const signup = async (payload: User) => {
 
 }
 const findUserByEmail = async (payload: User) => {
+    console.log({ payload })
     const result = await prisma.user.findUnique({ where: { email: payload.email } })
     return result;
 }
@@ -25,7 +26,23 @@ const findUserById = async (id: string) => {
             id: id
         },
         include: {
-            booking: true
+            booking: {
+                include: {
+                    service: {
+                        select: {
+                            serviceName: true,
+                            price: true
+                        }
+                    },
+                    schedule: {
+                        select: {
+                            startTime: true,
+                            endTime: true,
+                            date: true
+                        }
+                    }
+                }
+            }
         }
     })
     return result;

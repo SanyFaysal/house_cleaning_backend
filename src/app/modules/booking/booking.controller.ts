@@ -4,6 +4,7 @@ import { BookingService } from "./booking.service";
 import httpStatus from "http-status";
 
 import { ScheduleService } from "../schedule/schedule.service";
+import { BOOKING_STATUS, USER_ROLE } from "@prisma/client";
 
 const createBooking = catchAsync(async (req: Request, res: Response) => {
     const data = req.body;
@@ -30,8 +31,29 @@ const createBooking = catchAsync(async (req: Request, res: Response) => {
         })
     }
 })
+const updateBooking = catchAsync(async (req: Request, res: Response) => {
+    const data: Record<string, any> = req.body;
+    const { id } = req.params as { id: string };
+    const { role } = req.user as Record<string, any>;
+    if (role === USER_ROLE.USER && data?.status && data?.status !== BOOKING_STATUS.CANCELLED) {
+        return res.status(httpStatus.BAD_REQUEST).json({
+            status: false,
+            message: "You are not authorized",
+
+        })
+    }
+
+    const result = await BookingService.updateBooking(id, data);
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Update Successful",
+        data: result
+    })
+
+})
 
 
 export const BookingController = {
-    createBooking
+    createBooking,
+    updateBooking
 }
