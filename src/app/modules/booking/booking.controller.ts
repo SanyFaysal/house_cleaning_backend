@@ -8,7 +8,8 @@ import { BOOKING_STATUS, USER_ROLE } from "@prisma/client";
 
 const getAllBookings = catchAsync(async (req: Request, res: Response) => {
 
-    const result = await BookingService.getAllBookings()
+    const query = req.query;
+    const result = await BookingService.getAllBookings(query)
     return res.status(httpStatus.OK).json({
         status: true,
         message: "Successful",

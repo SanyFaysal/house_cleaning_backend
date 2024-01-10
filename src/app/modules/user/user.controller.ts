@@ -56,7 +56,7 @@ const signin = catchAsync(async (req: Request, res: Response) => {
     const { id, role } = userData;
     const token = jwtHelpers.createToken({ id, role }, config.jwt.secret as string, config.jwt.expires_in as string)
     return res.status(httpStatus.OK).json({
-        success: false,
+        success: true,
         message: 'Login success',
         token,
         data: userData

@@ -10,13 +10,13 @@ const router = express.Router();
 
 router.get(
     '/',
-    auth(USER_ROLE.USER),
-    BookingController.createBooking
+    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    BookingController.getAllBookings
 );
 router.post(
     '/',
-    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
-    BookingController.getAllBookings
+    auth(USER_ROLE.USER),
+    BookingController.createBooking
 );
 router.patch(
     '/:id',

@@ -1,5 +1,6 @@
-import { BOOKING_STATUS, Booking } from "@prisma/client"
+import { BOOKING_STATUS, Booking, Prisma } from "@prisma/client"
 import prisma from "../../../shared/prisma"
+import { PrismaClientOptions } from "@prisma/client/runtime/library";
 
 
 const createBooking = async (payload: Booking) => {
@@ -16,18 +17,25 @@ const updateBooking = async (id: string, data: Partial<Booking>) => {
     });
     return result;
 }
-const getAllBookings = async () => {
+const getAllBookings = async (query: any) => {
+    const andConditions: any[] = [];
+    if (Object.keys(query)?.length > 0) {
+        Object.keys(query)?.map(key => {
+            andConditions.push({
+                [key]: query[key]
+            })
+        })
+    }
+
+    const whereConditions: any = andConditions?.length > 0 ? { AND: andConditions } : {};
+    console.log(whereConditions)
     const result = await prisma.booking.findMany({
-        where: {
-            OR: [
-                {
-                    status: BOOKING_STATUS.PENDING,
-                },
-                {
-                    status: BOOKING_STATUS.CONFIRMED,
-                }
-            ]
-        }
+        where: whereConditions,
+        include: {
+            service: true,
+            schedule: true
+        },
+
     });
     return result;
 }
