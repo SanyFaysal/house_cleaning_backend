@@ -2,10 +2,17 @@ import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import { ServiceService } from "./service.service";
 import httpStatus from "http-status";
+import { uploader } from "../../helpers/imageUploader";
 
 const createService = catchAsync(async (req: Request, res: Response) => {
     const data = req.body;
-    const result = await ServiceService.createService(data);
+    //@ts-ignore
+    const file = req.file;
+    const serviceData = {
+        image: file,
+        ...data
+    }
+    const result = await ServiceService.createService(serviceData);
     return res.status(httpStatus.OK).json({
         status: true,
         message: "Successful",

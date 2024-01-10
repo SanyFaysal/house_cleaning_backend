@@ -5,6 +5,7 @@ import auth from "../../middlewares/auth";
 
 import express from 'express';
 import { ServiceController } from "./service.controller";
+import { uploader } from "../../helpers/imageUploader";
 
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const router = express.Router();
 router.post(
     '/',
     auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    uploader,
     ServiceController.createService
 );
 router.get(

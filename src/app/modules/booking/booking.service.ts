@@ -1,4 +1,4 @@
-import { Booking } from "@prisma/client"
+import { BOOKING_STATUS, Booking } from "@prisma/client"
 import prisma from "../../../shared/prisma"
 
 
@@ -16,8 +16,24 @@ const updateBooking = async (id: string, data: Partial<Booking>) => {
     });
     return result;
 }
+const getAllBookings = async () => {
+    const result = await prisma.booking.findMany({
+        where: {
+            OR: [
+                {
+                    status: BOOKING_STATUS.PENDING,
+                },
+                {
+                    status: BOOKING_STATUS.CONFIRMED,
+                }
+            ]
+        }
+    });
+    return result;
+}
 
 export const BookingService = {
     createBooking,
-    updateBooking
+    updateBooking,
+    getAllBookings
 }

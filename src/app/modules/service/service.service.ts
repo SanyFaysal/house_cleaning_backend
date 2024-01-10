@@ -2,6 +2,7 @@ import { Service } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 
 const createService = async (data: Service) => {
+
     const result = await prisma.service.create({ data });
     return result;
 }

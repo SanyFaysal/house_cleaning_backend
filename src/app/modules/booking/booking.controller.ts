@@ -6,6 +6,16 @@ import httpStatus from "http-status";
 import { ScheduleService } from "../schedule/schedule.service";
 import { BOOKING_STATUS, USER_ROLE } from "@prisma/client";
 
+const getAllBookings = catchAsync(async (req: Request, res: Response) => {
+
+    const result = await BookingService.getAllBookings()
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+
+})
 const createBooking = catchAsync(async (req: Request, res: Response) => {
     const data = req.body;
     const { id } = req.user as { id: string };
@@ -55,5 +65,6 @@ const updateBooking = catchAsync(async (req: Request, res: Response) => {
 
 export const BookingController = {
     createBooking,
-    updateBooking
+    updateBooking,
+    getAllBookings
 }

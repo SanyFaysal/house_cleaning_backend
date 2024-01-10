@@ -8,10 +8,15 @@ import { BookingController } from "./booking.controller";
 const router = express.Router();
 
 
-router.post(
+router.get(
     '/',
     auth(USER_ROLE.USER),
     BookingController.createBooking
+);
+router.post(
+    '/',
+    auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    BookingController.getAllBookings
 );
 router.patch(
     '/:id',

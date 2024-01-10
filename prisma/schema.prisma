@@ -43,6 +43,7 @@ model Service {
   id              String         @id @default(uuid())
   serviceName     String
   price           Int
+  image           String?
   serviceFeatures String?
   serviceDetails  String?
   pricingTerms    String?
