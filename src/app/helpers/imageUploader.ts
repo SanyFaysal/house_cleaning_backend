@@ -15,19 +15,21 @@ export const uploader = async (req: Request, res: Response, next: NextFunction) 
                 api_key: config.cloudinary.api_key,
                 api_secret: config.cloudinary.api_secret,
             };
+            if (files?.image) {
+                const response = await cloudinary.uploader.upload(
+                    files.image[0].filepath,
+                    cloudinaryConfig
+                );
+                if (!response.url) {
+                    return res.status(400).json({
+                        status: 0,
+                        error: "Something went wrong",
+                    });
+                }
 
-            const response = await cloudinary.uploader.upload(
-                files.image[0].filepath,
-                cloudinaryConfig
-            );
-            if (!response.url) {
-                return res.status(400).json({
-                    status: 0,
-                    error: "Something went wrong",
-                });
+                //@ts-ignore
+                req.file = response.url;
             }
-            //@ts-ignore
-            req.file = response.url;
             req.body = JSON.parse(fields?.data[0]);
             next()
         });

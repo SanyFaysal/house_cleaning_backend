@@ -48,13 +48,46 @@ const getServiceDetails = async (id: string) => {
     });
     return result;
 };
+const getServiceForAddReview = async (userId: string) => {
+    const result = await prisma.booking.findMany({
+        where: {
+            AND: [
+                { userId },
+                { status: 'DELIVERED' },
+                {
+                    NOT: {
+                        service: {
+                            review: {
+                                some: {
+                                    userId
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        select: {
+            serviceId: true,
+            status: true,
+            service: true,
+            createdAt: true
+        }
+    });
+
+    return result;
+
+
+};
 const updateService = async (id: string, data: any) => {
+
     const result = await prisma.service.update({
         where: {
             id,
         },
         data
     });
+
     return result;
 };
 
@@ -72,5 +105,6 @@ export const ServiceService = {
     getAllService,
     getServiceDetails,
     updateService,
-    deleteService
+    deleteService,
+    getServiceForAddReview
 }

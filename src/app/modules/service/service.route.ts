@@ -22,13 +22,21 @@ router.get(
     '/all',
     ServiceController.getAllService
 );
+
+router.get(
+    '/availableForReview',
+    auth(USER_ROLE.USER),
+    ServiceController.getServiceForAddReview
+);
 router.get(
     '/:id',
     ServiceController.getServiceDetails
 );
+
 router.patch(
     '/:id',
     auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    uploader,
     ServiceController.updateService
 );
 router.delete(

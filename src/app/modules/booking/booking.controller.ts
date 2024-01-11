@@ -62,10 +62,22 @@ const updateBooking = catchAsync(async (req: Request, res: Response) => {
     })
 
 })
+const cancelBooking = catchAsync(async (req: Request, res: Response) => {
+
+    const { id } = req.params as { id: string };
+    const result = await BookingService.cancelBooking(id);
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Cancelled Successful",
+        data: result
+    })
+
+})
 
 
 export const BookingController = {
     createBooking,
     updateBooking,
-    getAllBookings
+    getAllBookings,
+    cancelBooking
 }

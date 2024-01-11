@@ -17,6 +17,14 @@ const updateBooking = async (id: string, data: Partial<Booking>) => {
     });
     return result;
 }
+const cancelBooking = async (id: string) => {
+    const result = await prisma.booking.delete({
+        where: {
+            id,
+        }
+    });
+    return result;
+}
 const getAllBookings = async (query: any) => {
     const andConditions: any[] = [];
     if (Object.keys(query)?.length > 0) {
@@ -43,5 +51,6 @@ const getAllBookings = async (query: any) => {
 export const BookingService = {
     createBooking,
     updateBooking,
-    getAllBookings
+    getAllBookings,
+    cancelBooking
 }

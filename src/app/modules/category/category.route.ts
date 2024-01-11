@@ -18,6 +18,10 @@ router.get(
     '/all',
     CategoryController.getAllCategories
 );
+router.get(
+    '/:id',
+    CategoryController.getCategoryById
+);
 router.patch(
     '/:id',
     auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),

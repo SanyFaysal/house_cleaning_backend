@@ -37,10 +37,25 @@ const getServiceDetails = catchAsync(async (req: Request, res: Response) => {
         data: result
     })
 })
+const getServiceForAddReview = catchAsync(async (req: Request, res: Response) => {
+    const { id: userId } = req.user as { id: string }
+    const result = await ServiceService.getServiceForAddReview(userId);
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+})
 const updateService = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string }
-    const data = req.body
-    const result = await ServiceService.updateService(id, data);
+    const data = req.body;
+    //@ts-ignore
+    const file = req?.file ? req.file : data?.image;
+    const serviceData = {
+        ...data,
+        image: file
+    }
+    const result = await ServiceService.updateService(id, serviceData);
     return res.status(httpStatus.OK).json({
         status: true,
         message: "Successful",
@@ -64,5 +79,6 @@ export const ServiceController = {
     getAllService,
     updateService,
     getServiceDetails,
-    deleteService
+    deleteService,
+    getServiceForAddReview
 }
