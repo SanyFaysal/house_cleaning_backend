@@ -29,6 +29,10 @@ router.get(
     ServiceController.getServiceForAddReview
 );
 router.get(
+    '/comment/:serviceId',
+    ServiceController.getServiceComments
+);
+router.get(
     '/:id',
     ServiceController.getServiceDetails
 );
@@ -45,7 +49,11 @@ router.delete(
     ServiceController.deleteService
 );
 
-
+router.post(
+    '/comment',
+    auth(),
+    ServiceController.makeComment
+);
 
 
 

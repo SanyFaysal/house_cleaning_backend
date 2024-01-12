@@ -48,6 +48,18 @@ const getServiceDetails = async (id: string) => {
     });
     return result;
 };
+
+const updateService = async (id: string, data: any) => {
+
+    const result = await prisma.service.update({
+        where: {
+            id,
+        },
+        data
+    });
+
+    return result;
+};
 const getServiceForAddReview = async (userId: string) => {
     const result = await prisma.booking.findMany({
         where: {
@@ -79,17 +91,6 @@ const getServiceForAddReview = async (userId: string) => {
 
 
 };
-const updateService = async (id: string, data: any) => {
-
-    const result = await prisma.service.update({
-        where: {
-            id,
-        },
-        data
-    });
-
-    return result;
-};
 
 
 const deleteService = async (id: string) => {
@@ -100,11 +101,47 @@ const deleteService = async (id: string) => {
     });
     return result;
 };
+
+const makeComment = async (data: any) => {
+    const result = await prisma.comment.create({
+        data: data
+    })
+    return result;
+}
+const getServiceComments = async (serviceId: string) => {
+    const result = await prisma.comment.findMany({
+        where: {
+            serviceId
+        },
+        include: {
+            user: {
+                select: {
+                    fullName: true
+                }
+            },
+            replies: {
+                select: {
+                    createdAt: true,
+                    reply: true,
+                    user: {
+                        select: {
+                            fullName: true
+                        }
+                    }
+                }
+            }
+        }
+    })
+    return result;
+}
+
 export const ServiceService = {
     createService,
     getAllService,
     getServiceDetails,
     updateService,
     deleteService,
-    getServiceForAddReview
+    getServiceForAddReview,
+    makeComment,
+    getServiceComments
 }

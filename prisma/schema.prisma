@@ -19,8 +19,10 @@ model User {
   cart   Cart?
   review Review[]
 
-  role    USER_ROLE @default(USER)
-  booking Booking[]
+  role     USER_ROLE @default(USER)
+  booking  Booking[]
+  Comments Comment[]
+  Replies  Reply[]
 
   @@map("users")
 }
@@ -59,6 +61,7 @@ model Service {
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
+  Comments  Comment[]
 
   @@map("services")
 }
@@ -133,6 +136,40 @@ model Review {
   updatedAt DateTime? @updatedAt
 
   @@map("reviews")
+}
+
+model Comment {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  comment String
+  replies Reply[]
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("comments")
+}
+
+model Reply {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  commentId String
+  comment   Comment @relation(fields: [commentId], references: [id])
+  reply     String
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("replies")
 }
 
 enum USER_ROLE {
