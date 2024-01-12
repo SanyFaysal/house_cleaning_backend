@@ -93,7 +93,15 @@ const getServiceComments = catchAsync(async (req: Request, res: Response) => {
         data: result
     })
 })
-
+const makeReply = catchAsync(async (req: Request, res: Response) => {
+    const data = req.body;
+    const result = await ServiceService.makeReply(data);
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+})
 export const ServiceController = {
     createService,
     getAllService,
@@ -102,5 +110,6 @@ export const ServiceController = {
     deleteService,
     getServiceForAddReview,
     makeComment,
-    getServiceComments
+    getServiceComments,
+    makeReply
 }

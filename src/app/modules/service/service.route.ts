@@ -54,6 +54,11 @@ router.post(
     auth(),
     ServiceController.makeComment
 );
+router.post(
+    '/reply',
+    auth(),
+    ServiceController.makeReply
+);
 
 
 

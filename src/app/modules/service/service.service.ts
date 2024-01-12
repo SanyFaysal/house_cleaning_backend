@@ -135,6 +135,13 @@ const getServiceComments = async (serviceId: string) => {
     return result;
 }
 
+const makeReply = async (data: any) => {
+    const result = await prisma.reply.create({
+        data: data
+    })
+    return result;
+}
+
 export const ServiceService = {
     createService,
     getAllService,
@@ -143,5 +150,6 @@ export const ServiceService = {
     deleteService,
     getServiceForAddReview,
     makeComment,
-    getServiceComments
+    getServiceComments,
+    makeReply
 }
