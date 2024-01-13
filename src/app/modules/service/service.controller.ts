@@ -20,8 +20,8 @@ const createService = catchAsync(async (req: Request, res: Response) => {
     })
 })
 const getAllService = catchAsync(async (req: Request, res: Response) => {
-
-    const result = await ServiceService.getAllService();
+    const query = req.query;
+    const result = await ServiceService.getAllService(query);
     return res.status(httpStatus.OK).json({
         status: true,
         message: "Successful",

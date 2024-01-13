@@ -1,5 +1,6 @@
 import { Service } from "@prisma/client";
 import prisma from "../../../shared/prisma";
+import { serviceSearchableFields } from "./service.constants";
 
 const createService = async (data: Service) => {
 
@@ -8,8 +9,11 @@ const createService = async (data: Service) => {
 }
 
 
-const getAllService = async (query: any) => {
+const getAllService = async (allQuery: any) => {
+    const { category, searchTerm, ...query } = allQuery;
     const andConditions: any[] = [];
+    const orConditions: any[] = [];
+
     if (Object.keys(query)?.length > 0) {
         Object.keys(query)?.map(key => {
             andConditions.push({
@@ -17,8 +21,28 @@ const getAllService = async (query: any) => {
             })
         })
     }
+    if (category) {
+        andConditions.push({
+            category: {
+                title: category
+            }
+        })
+    }
+    if (searchTerm?.length) {
+        serviceSearchableFields?.map(key => {
+            orConditions.push({
+                [key]: {
+                    contains: searchTerm,
+                    mode: 'insensitive',
+                },
+            })
+        })
+    }
 
-    const whereConditions: any = andConditions?.length > 0 ? { AND: andConditions } : {};
+
+    const whereConditions: any = {};
+    if (andConditions?.length > 0) whereConditions['AND'] = andConditions
+    if (orConditions?.length > 0) whereConditions['OR'] = orConditions
 
     const result = await prisma.service.findMany({
         where: whereConditions,
@@ -27,7 +51,8 @@ const getAllService = async (query: any) => {
                 select: {
                     id: true
                 }
-            }
+            },
+            category: true
         }
     });
     return result;
