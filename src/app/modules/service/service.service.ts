@@ -8,8 +8,20 @@ const createService = async (data: Service) => {
 }
 
 
-const getAllService = async () => {
+const getAllService = async (query: any) => {
+    const andConditions: any[] = [];
+    if (Object.keys(query)?.length > 0) {
+        Object.keys(query)?.map(key => {
+            andConditions.push({
+                [key]: query[key]
+            })
+        })
+    }
+
+    const whereConditions: any = andConditions?.length > 0 ? { AND: andConditions } : {};
+
     const result = await prisma.service.findMany({
+        where: whereConditions,
         include: {
             booking: {
                 select: {
