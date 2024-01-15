@@ -3,6 +3,7 @@ import catchAsync from "../../../shared/catchAsync";
 import { ServiceService } from "./service.service";
 import httpStatus from "http-status";
 import { uploader } from "../../helpers/imageUploader";
+import { IPaginationOptions } from "../../../interfaces/pagination";
 
 const createService = catchAsync(async (req: Request, res: Response) => {
     const data = req.body;
@@ -20,12 +21,21 @@ const createService = catchAsync(async (req: Request, res: Response) => {
     })
 })
 const getAllService = catchAsync(async (req: Request, res: Response) => {
-    const query = req.query;
-    const result = await ServiceService.getAllService(query);
+    const { sortBy, sortOrder, limit, page, ...filters } = req.query;
+    const options: any = {
+        sortBy,
+        sortOrder,
+        limit,
+        page
+    }
+    console.log({ options, filters })
+    const { result, highestPrice, lowestPrice } = await ServiceService.getAllService(filters, options);
     return res.status(httpStatus.OK).json({
         status: true,
         message: "Successful",
-        data: result
+        data: result,
+        highestPrice,
+        lowestPrice
     })
 })
 const getServiceDetails = catchAsync(async (req: Request, res: Response) => {

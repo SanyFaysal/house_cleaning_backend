@@ -1,6 +1,7 @@
 import { Service } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import { serviceSearchableFields } from "./service.constants";
+import { paginationHelpers } from "../../helpers/paginationHelpers";
 
 const createService = async (data: Service) => {
 
@@ -9,18 +10,23 @@ const createService = async (data: Service) => {
 }
 
 
-const getAllService = async (allQuery: any) => {
-    const { category, searchTerm, ...query } = allQuery;
+const getAllService = async (filters: any, options: any) => {
+    const { searchTerm, category }: any = filters;
+
+    const { limit, page, skip, sortBy, sortOrder } = paginationHelpers.calculatePagination(options)
+
     const andConditions: any[] = [];
     const orConditions: any[] = [];
 
-    if (Object.keys(query)?.length > 0) {
-        Object.keys(query)?.map(key => {
-            andConditions.push({
-                [key]: query[key]
-            })
-        })
-    }
+    // if (Object.keys(filterData)?.length > 0) {
+    //     Object.keys(filterData)?.map(key => {
+    //         andConditions.push({
+    //             [key]: filterData[key]
+    //         })
+    //     })
+    // }
+
+
     if (category) {
         andConditions.push({
             category: {
@@ -53,10 +59,35 @@ const getAllService = async (allQuery: any) => {
                 }
             },
             category: true
-        }
+        },
+        skip,
+        take: limit,
     });
-    return result;
+
+
+    const highestPrice = await prisma.service.findFirst({
+        where: whereConditions,
+        select: {
+            price: true
+        },
+        orderBy: {
+            price: 'desc'
+        }
+    })
+    const lowestPrice = await prisma.service.findFirst({
+        where: whereConditions,
+        select: {
+            price: true
+        },
+        orderBy: {
+            price: 'asc'
+        }
+    })
+
+    return { result, highestPrice, lowestPrice };
 };
+
+
 
 const getServiceDetails = async (id: string) => {
     const result = await prisma.service.findFirst({
