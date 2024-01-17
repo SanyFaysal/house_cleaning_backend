@@ -14,5 +14,9 @@ router.get(
     '/all',
     ReviewController.getAllReviews
 );
+router.get(
+    '/all-ids',
+    ReviewController.getAllReviewIds
+);
 
 export const ReviewRoutes = router;

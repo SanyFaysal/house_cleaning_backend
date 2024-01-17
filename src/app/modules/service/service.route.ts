@@ -22,6 +22,10 @@ router.get(
     '/all',
     ServiceController.getAllService
 );
+router.get(
+    '/all-ids',
+    ServiceController.getAllServiceIds
+);
 
 router.get(
     '/availableForReview',

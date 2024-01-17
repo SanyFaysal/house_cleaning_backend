@@ -11,26 +11,29 @@ const createService = async (data: Service) => {
 
 
 const getAllService = async (filters: any, options: any) => {
-    const { searchTerm, category }: any = filters;
+    const { searchTerm, category, ...filterData }: any = filters;
 
     const { limit, page, skip, sortBy, sortOrder } = paginationHelpers.calculatePagination(options)
 
     const andConditions: any[] = [];
     const orConditions: any[] = [];
 
-    // if (Object.keys(filterData)?.length > 0) {
-    //     Object.keys(filterData)?.map(key => {
-    //         andConditions.push({
-    //             [key]: filterData[key]
-    //         })
-    //     })
-    // }
+    if (Object.keys(filterData)?.length > 0) {
+        Object.keys(filterData)?.map(key => {
+            andConditions.push({
+                [key]: filterData[key]
+            })
+        })
+    }
 
 
     if (category) {
         andConditions.push({
             category: {
-                title: category
+                title: {
+                    contains: category,
+                    mode: 'insensitive'
+                }
             }
         })
     }
@@ -63,8 +66,6 @@ const getAllService = async (filters: any, options: any) => {
         skip,
         take: limit,
     });
-
-
     const highestPrice = await prisma.service.findFirst({
         where: whereConditions,
         select: {
@@ -85,6 +86,14 @@ const getAllService = async (filters: any, options: any) => {
     })
 
     return { result, highestPrice, lowestPrice };
+};
+const getAllServiceIds = async () => {
+    const result = await prisma.service.findMany({
+        select: {
+            id: true
+        }
+    });
+    return result
 };
 
 
@@ -213,11 +222,13 @@ const makeReply = async (data: any) => {
 export const ServiceService = {
     createService,
     getAllService,
+    getAllServiceIds,
     getServiceDetails,
     updateService,
     deleteService,
     getServiceForAddReview,
     makeComment,
     getServiceComments,
-    makeReply
+    makeReply,
+
 }

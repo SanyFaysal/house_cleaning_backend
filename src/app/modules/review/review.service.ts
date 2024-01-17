@@ -19,8 +19,18 @@ const getAllReviews = async () => {
     });
     return result;
 }
+const getAllReviewIds = async () => {
+
+    const result = await prisma.review.findMany({
+        select: {
+            id: true
+        }
+    });
+    return result;
+}
 
 export const ReviewService = {
     createReview,
-    getAllReviews
+    getAllReviews,
+    getAllReviewIds
 }

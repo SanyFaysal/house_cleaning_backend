@@ -28,7 +28,7 @@ const getAllService = catchAsync(async (req: Request, res: Response) => {
         limit,
         page
     }
-    console.log({ options, filters })
+
     const { result, highestPrice, lowestPrice } = await ServiceService.getAllService(filters, options);
     return res.status(httpStatus.OK).json({
         status: true,
@@ -38,6 +38,17 @@ const getAllService = catchAsync(async (req: Request, res: Response) => {
         lowestPrice
     })
 })
+
+const getAllServiceIds = catchAsync(async (req: Request, res: Response) => {
+    const result = await ServiceService.getAllServiceIds();
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result,
+
+    })
+});
+
 const getServiceDetails = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string }
     const result = await ServiceService.getServiceDetails(id);
@@ -117,6 +128,7 @@ export const ServiceController = {
     getAllService,
     updateService,
     getServiceDetails,
+    getAllServiceIds,
     deleteService,
     getServiceForAddReview,
     makeComment,

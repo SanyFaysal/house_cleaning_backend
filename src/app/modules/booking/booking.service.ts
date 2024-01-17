@@ -47,10 +47,24 @@ const getAllBookings = async (query: any) => {
     });
     return result;
 }
+const getAllBookingsId = async () => {
+    const result = await prisma.booking.findMany({
+        where: {
+            NOT: {
+                status: 'CANCELLED'
+            }
+        },
+        select: {
+            id: true
+        }
+    });
+    return result;
+}
 
 export const BookingService = {
     createBooking,
     updateBooking,
     getAllBookings,
-    cancelBooking
+    cancelBooking,
+    getAllBookingsId
 }

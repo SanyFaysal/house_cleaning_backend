@@ -21,8 +21,17 @@ const getAllReviews = catchAsync(async (req: Request, res: Response) => {
         data: result
     })
 })
+const getAllReviewIds = catchAsync(async (req: Request, res: Response) => {
+    const result = await ReviewService.getAllReviewIds();
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+})
 
 export const ReviewController = {
     createReview,
-    getAllReviews
+    getAllReviews,
+    getAllReviewIds
 }

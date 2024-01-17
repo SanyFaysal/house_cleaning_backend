@@ -13,6 +13,10 @@ router.get(
     auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
     BookingController.getAllBookings
 );
+router.get(
+    '/all-ids',
+    BookingController.getAllBookings
+);
 router.post(
     '/',
     auth(USER_ROLE.USER),
