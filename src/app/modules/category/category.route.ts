@@ -5,13 +5,13 @@ import auth from "../../middlewares/auth";
 
 import express from 'express';
 import { CategoryController } from "./category.controller";
+import { uploader } from "../../middlewares/imageUploader";
 
 const router = express.Router();
-
-
 router.post(
     '/',
     auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    uploader,
     CategoryController.createCategory
 );
 router.get(
@@ -25,6 +25,7 @@ router.get(
 router.patch(
     '/:id',
     auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+    uploader,
     CategoryController.updateCategory
 );
 

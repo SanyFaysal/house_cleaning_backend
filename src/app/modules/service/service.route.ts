@@ -5,7 +5,7 @@ import auth from "../../middlewares/auth";
 
 import express from 'express';
 import { ServiceController } from "./service.controller";
-import { uploader } from "../../helpers/imageUploader";
+import { uploader } from "../../middlewares/imageUploader";
 
 
 const router = express.Router();

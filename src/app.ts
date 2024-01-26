@@ -11,6 +11,12 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api/v1', routes);
+app.use('/', (req: Request, res: Response) => {
+    res.status(200).json({
+        status: 'success',
+        message: "Yay, Route is working !"
+    })
+});
 
 //handle not found
 app.use((req: Request, res: Response, next: NextFunction) => {

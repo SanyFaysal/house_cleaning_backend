@@ -13,11 +13,12 @@ model User {
   email       String    @unique
   password    String?
   phoneNumber String?
+  image       String?
+  address     String?
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @updatedAt
-
-  cart   Cart?
-  review Review[]
+  cart        Cart?
+  review      Review[]
 
   role     USER_ROLE @default(USER)
   booking  Booking[]
@@ -69,6 +70,7 @@ model Service {
 model Category {
   id        String    @id @default(uuid())
   title     String
+  image     String?
   service   Service[]
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt

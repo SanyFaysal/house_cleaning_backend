@@ -6,7 +6,13 @@ import httpStatus from "http-status";
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
     const data = req.body;
-    const result = await CategoryService.createCategory(data);
+    //@ts-ignore
+    const image = req.file;
+    const categoryData = {
+        ...data,
+        image
+    }
+    const result = await CategoryService.createCategory(categoryData);
     return res.status(httpStatus.OK).json({
         status: true,
         message: "Successful",
@@ -34,7 +40,14 @@ const getCategoryById = catchAsync(async (req: Request, res: Response) => {
 const updateCategory = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params as { id: string }
     const data = req.body
-    const result = await CategoryService.updateCategory(id, data);
+    //@ts-ignore
+    const file = req?.file ? req.file : data?.image;
+    const categoryData = {
+        ...data,
+        image: file
+    }
+
+    const result = await CategoryService.updateCategory(id, categoryData);
     return res.status(httpStatus.OK).json({
         status: true,
         message: "Successful",

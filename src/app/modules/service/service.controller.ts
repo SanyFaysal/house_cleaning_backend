@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import { ServiceService } from "./service.service";
 import httpStatus from "http-status";
-import { uploader } from "../../helpers/imageUploader";
+import { uploader } from "../../middlewares/imageUploader";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 
 const createService = catchAsync(async (req: Request, res: Response) => {
