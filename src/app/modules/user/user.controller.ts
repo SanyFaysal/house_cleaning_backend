@@ -94,11 +94,59 @@ const makeAdmin = catchAsync(async (req: Request, res: Response) => {
         data: result
     })
 })
+const addToCart = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.user as any;
+    const data = req.body;
+    if (!id) {
+        return res.status(httpStatus.NOT_ACCEPTABLE).json({
+            success: false,
+            message: 'Please login first'
+        });
+    }
+    const cartData = {
+        userId: id,
+        serviceId: data.serviceId
+    }
+    const result = await UserService.addToCart(cartData);
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+})
+const getCart = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.user as any;
+    if (!id) {
+        return res.status(httpStatus.NOT_ACCEPTABLE).json({
+            success: false,
+            message: 'Please login first'
+        });
+    }
+
+    const result = await UserService.getCart(id);
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+})
+const removeCartService = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await UserService.removeCartService(id);
+    return res.status(httpStatus.OK).json({
+        status: true,
+        message: "Successful",
+        data: result
+    })
+})
 
 export const UserController = {
     signup,
     signin,
     getMe,
     getAllUser,
-    makeAdmin
+    makeAdmin,
+    addToCart,
+    getCart,
+    removeCartService
 }

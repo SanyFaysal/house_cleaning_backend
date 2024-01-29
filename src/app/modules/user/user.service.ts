@@ -87,6 +87,32 @@ const makeAdmin = async (id: string) => {
     })
     return result;
 }
+const addToCart = async (data: any) => {
+    const result = await prisma.cart.create({
+        data
+    })
+    return result;
+}
+const getCart = async (id: string) => {
+    const result = await prisma.cart.findMany({
+        where: {
+            userId: id
+        },
+        include: {
+            service: true
+        }
+    })
+    return result;
+}
+const removeCartService = async (id: string) => {
+    const result = await prisma.cart.delete({
+        where: {
+            id
+        },
+
+    })
+    return result;
+}
 
 export const UserService = {
     signup,
@@ -94,4 +120,7 @@ export const UserService = {
     findUserById,
     getAllUser,
     makeAdmin,
+    addToCart,
+    getCart,
+    removeCartService
 }

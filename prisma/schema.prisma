@@ -17,7 +17,7 @@ model User {
   address     String?
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @updatedAt
-  cart        Cart?
+  cart        Cart[]
   review      Review[]
 
   role     USER_ROLE @default(USER)
@@ -30,7 +30,7 @@ model User {
 
 model Cart {
   id     String @id @default(uuid())
-  userId String @unique
+  userId String
   user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime? @default(now())

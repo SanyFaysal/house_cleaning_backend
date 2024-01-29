@@ -18,11 +18,27 @@ router.get(
     UserController.getAllUser);
 
 
+
 router.patch(
     '/make-admin/:userId',
     auth(USER_ROLE.SUPER_ADMIN),
     UserController.makeAdmin
 );
+
+
+
+router.post(
+    '/cart',
+    auth(USER_ROLE.USER),
+    UserController.addToCart);
+router.get(
+    '/cart/all',
+    auth(USER_ROLE.USER),
+    UserController.getCart);
+router.delete(
+    '/cart/:id',
+    auth(USER_ROLE.USER),
+    UserController.removeCartService);
 
 
 export const UserRoutes = router;
