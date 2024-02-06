@@ -2,6 +2,7 @@ import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status'
 import routes from './app/routes';
+import { globalErrorHandler } from './app/middlewares/globalErrorHandler';
 
 const app: Application = express();
 
@@ -11,12 +12,15 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api/v1', routes);
-app.use('/', (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
         status: 'success',
         message: "Yay, Route is working !"
     })
 });
+
+
+
 
 //handle not found
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -32,7 +36,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     });
     next();
 });
-
+app.use(globalErrorHandler)
 
 export default app;
 
